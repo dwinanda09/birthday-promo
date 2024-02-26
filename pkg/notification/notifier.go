@@ -1,4 +1,3 @@
-// notifier.go
 package notification
 
 import (
