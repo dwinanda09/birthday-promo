@@ -21,7 +21,7 @@ func NewCronScheduler(pr usecase.PromoUsecaseItf) *CronScheduler {
 
 func (cs *CronScheduler) Start() {
 	c := cron.New()
-	_, err := c.AddFunc("0 0 * * *", cs.triggerNotification) 
+	_, err := c.AddFunc("0 0 * * *", cs.triggerNotification)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -60,7 +60,7 @@ func (cs *CronScheduler) triggerNotification() {
 // initRedis initializes the Redis client
 func initRedis() *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
-		Addr: "localhost:6379", 
+		Addr: "localhost:6379",
 		DB:   0,
 	})
 	return rdb
