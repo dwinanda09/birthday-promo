@@ -32,15 +32,11 @@ func main() {
 
 	// for seeding the DB
 	// err = SeedDB(db)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	defer sqlDB.Close()
-
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	// Create instances of repositories
 	appUserRepo := repo.NewAppUserRepository(db)
