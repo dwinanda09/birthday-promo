@@ -19,9 +19,9 @@ type PromoRepository struct {
 func (r *PromoRepository) FindPromo(promoType string) (entity.Promo, error) {
 	var promo entity.Promo
 
-	err := r.db.Table("promo").Where("promo_type = ?", promoType).First(&promo)
+	err := r.db.Where("promo_type = ?", promoType).First(&promo).Error
 	if err != nil {
-		return entity.Promo{}, err.Error
+		return entity.Promo{}, err
 	}
 
 	return promo, nil
@@ -29,7 +29,7 @@ func (r *PromoRepository) FindPromo(promoType string) (entity.Promo, error) {
 
 // GeneratePromoCode implements PromoRepositoryItf.
 func (r *PromoRepository) GeneratePromoCode(payload []entity.UserPromoRelation) error {
-	return r.db.Table("user_promo_relation").Save(payload).Error
+	return r.db.Table("user_promo_relations").Save(payload).Error
 }
 
 func NewPromoRepository(db *gorm.DB) PromoRepositoryItf {

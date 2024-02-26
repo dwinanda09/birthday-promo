@@ -22,7 +22,7 @@ func (r PromoUsecase) GeneratePromoCode(payload entity.GeneratePromoPayload) ([]
 		return nil, err
 	}
 
-	promoID, err := r.pr.FindPromo(payload.PromoName)
+	promo, err := r.pr.FindPromo(payload.PromoName)
 	if err != nil {
 		return nil, err
 	}
@@ -32,11 +32,13 @@ func (r PromoUsecase) GeneratePromoCode(payload entity.GeneratePromoPayload) ([]
 	for _, validUser := range validUsers {
 		userPromoEntity = append(userPromoEntity, entity.UserPromoRelation{
 			UserID:    validUser.ID,
-			PromoID:   promoID.ID,
+			PromoID:   promo.ID,
 			Amount:    0.25,
 			PromoCode: fmt.Sprintf("bday%s%d", validUser.Name, validUser.ID),
 			StartDate: payload.StartDate,
 			EndDate:   payload.EndDate,
+			Email:     validUser.Email,
+			ID:        0,
 		})
 	}
 

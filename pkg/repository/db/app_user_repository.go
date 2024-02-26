@@ -20,7 +20,7 @@ func (r *AppUserRepository) FetchBirthdayUsers() ([]entity.App_User, error) {
 	var users []entity.App_User
 
 	today := time.Now().Format("2006-01-02")
-	query := r.db.Where("TO_CHAR(birthdate, 'YYYY-MM-DD') = ? and isverified = ?", today, true).Find(&users)
+	query := r.db.Table("app_users").Where("TO_CHAR(birthdate, 'YYYY-MM-DD') = ? and isverified = ?", today, true).Find(&users)
 	if query.Error != nil {
 		return nil, query.Error
 	}

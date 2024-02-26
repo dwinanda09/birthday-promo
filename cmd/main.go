@@ -2,11 +2,13 @@ package main
 
 import (
 	"birthday-promo-sim/pkg/entity"
+	"birthday-promo-sim/pkg/handlers"
 	repo "birthday-promo-sim/pkg/repository/db"
 	"birthday-promo-sim/pkg/scheduler"
 	"birthday-promo-sim/pkg/usecase"
 	"fmt"
 	"log"
+	"net/http"
 	"time"
 
 	"gorm.io/driver/postgres"
@@ -47,6 +49,20 @@ func main() {
 
 	cronScheduler := scheduler.NewCronScheduler(promoUsecase)
 	go cronScheduler.Start()
+
+	apiHandler := handlers.NewAPIHandler(promoUsecase)
+
+	router := handlers.SetupRouter(apiHandler)
+	server := &http.Server{
+		Addr:         ":8080",
+		Handler:      router,
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+
+	// Start the server
+	fmt.Println("Server is running on :8080")
+	log.Fatal(server.ListenAndServe())
 
 	// Keep the main Goroutine running
 	select {}

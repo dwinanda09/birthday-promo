@@ -3,6 +3,7 @@ package notification
 import (
 	"birthday-promo-sim/pkg/entity"
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/go-redis/redis/v8"
@@ -22,7 +23,12 @@ func SendNotification(redisClient *redis.Client, users []entity.UserPromoRelatio
 			SayaKaya.id Team`, user.Email, user.PromoCode, user.Amount),
 			Target: user.Email,
 		}
-		err := redisClient.Publish(ctx, "notifications", notification).Err()
+		// Convert the NotificationPayload to JSON
+		notificationJSON, err := json.Marshal(notification)
+		if err != nil {
+			return err
+		}
+		err = redisClient.Publish(ctx, "notifications", notificationJSON).Err()
 		fmt.Printf("notification is sent to %s's %s\n", user.Email, notification.NotificationType)
 		if err != nil {
 			return err
